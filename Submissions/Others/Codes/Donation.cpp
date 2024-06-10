@@ -45,12 +45,10 @@ void solve() {
       tot += x;
     }
   }
-  int sz = edges.size();
   sort(edges.begin(), edges.end());
   DSU dsu(n);
   int min_cost = 0;
-  for (auto e : edges) {
-    int w = e[0], u = e[1], v = e[2];
+  for (auto [w, u, v] : edges) {
     if (!dsu.same(u, v)) {
       dsu.merge(u, v);
       min_cost += w;
