@@ -1,149 +1,40 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define int long long
-int n;
-int a[4][4], b[4][4];
+bool CHECK(int N, int pos) { return (bool)(N & (1 << pos)); }
+void SET(int &N, int pos) { (N |= (1 << pos)); }
 
-void bosha() {
-  a[1][2] = 15 - a[1][1] - a[1][3];
-  a[3][2] = 15 - a[3][1] - a[3][3];
-  a[2][1] = 15 - a[1][1] - a[3][1];
-  a[2][3] = 15 - a[1][3] - a[3][3];
-  // for (int i = 1; i <= n; i++) {
-  //   for (int j = 1; j <= n; j++) {
-  //     cout << a[i][j] << ' ';
-  //   }
-  //   cout << '\n';
-  // }
-  // cout << '\n';
-
-}
-
-int check() {
-  int ans = 1e18;
-  int ans1 = 0;
-  a[1][1] = 2;
-  a[1][3] = 4;
-  a[3][1] = 6;
-  a[3][3] = 8;
-  bosha();
-  for (int i = 1; i <= n; i++) {
-    for (int j = 1; j <= n; j++) {
-      ans1 += abs(a[i][j] - b[i][j]);
-    }
+bool is_prime(int n) {
+  if (n <= 1) return false;
+  for (int i = 2; 1ll * i * i <= n; i++) {
+    if (n % i == 0) return false;
   }
-  ans = min(ans, ans1);
-
-
-  ans1 = 0;
-  a[1][1] = 2;
-  a[1][3] = 6;
-  a[3][1] = 4;
-  a[3][3] = 8;
-  bosha();
-  for (int i = 1; i <= n; i++) {
-    for (int j = 1; j <= n; j++) {
-      ans1 += abs(a[i][j] - b[i][j]);
-    }
-  }
-  ans = min(ans, ans1);
-
-  ans1 = 0;
-  a[1][1] = 8;
-  a[1][3] = 6;
-  a[3][1] = 4;
-  a[3][3] = 2;
-  bosha();
-  for (int i = 1; i <= n; i++) {
-    for (int j = 1; j <= n; j++) {
-      ans1 += abs(a[i][j] - b[i][j]);
-    }
-  }
-  ans = min(ans, ans1);
-
-  ans1 = 0;
-  a[1][1] = 8;
-  a[1][3] = 4;
-  a[3][1] = 6;
-  a[3][3] = 2;
-  bosha();
-  for (int i = 1; i <= n; i++) {
-    for (int j = 1; j <= n; j++) {
-      ans1 += abs(a[i][j] - b[i][j]);
-    }
-  }
-  ans = min(ans, ans1);
-
-  ans1 = 0;
-  a[1][1] = 4;
-  a[1][3] = 2;
-  a[3][1] = 8;
-  a[3][3] = 6;
-  bosha();
-  for (int i = 1; i <= n; i++) {
-    for (int j = 1; j <= n; j++) {
-      ans1 += abs(a[i][j] - b[i][j]);
-    }
-  }
-  ans = min(ans, ans1);
-
-  ans1 = 0;
-  a[1][1] = 4;
-  a[1][3] = 8;
-  a[3][1] = 2;
-  a[3][3] = 6;
-  bosha();
-  for (int i = 1; i <= n; i++) {
-    for (int j = 1; j <= n; j++) {
-      ans1 += abs(a[i][j] - b[i][j]);
-    }
-  }
-  ans = min(ans, ans1);
-
-  ans1 = 0;
-  a[1][1] = 6;
-  a[1][3] = 2;
-  a[3][1] = 8;
-  a[3][3] = 4;
-  bosha();
-  for (int i = 1; i <= n; i++) {
-    for (int j = 1; j <= n; j++) {
-      ans1 += abs(a[i][j] - b[i][j]);
-    }
-  }
-  ans = min(ans, ans1);
-
-  ans1 = 0;
-  a[1][1] = 6;
-  a[1][3] = 8;
-  a[3][1] = 2;
-  a[3][3] = 4;
-  bosha();
-  for (int i = 1; i <= n; i++) {
-    for (int j = 1; j <= n; j++) {
-      ans1 += abs(a[i][j] - b[i][j]);
-    }
-  }
-  ans = min(ans, ans1);
-
-  return ans;
+  return true;
 }
 
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-  n = 3;
-
-  for (int i = 1; i <= n; i++) {
-    for (int j = 1; j <= n; j++) {
-      cin >> b[i][j];
-    }
+  int n; cin >> n;
+  vector<int> v(n);
+  set<int> se;
+  int i = 0;
+  int now = 0, a = (1 << 30) - 1, o  = 0, xx = 0;
+  for (auto &x : v) cin >> x;
+  for (auto x : v) {
+    a &= x;
+    o |= x;
+    xx ^= x;
+    se.insert(x);
   }
-  
-  a[2][2] = 5;
-  cout << check() << '\n';
+
+  cout << se.size() << ' ' << o << ' ' << xx << ' ' << a << '\n';
+  if (se.size() == n and is_prime(o) and is_prime(a) and is_prime(xx)) {
+    cout << "OK\n";
+  }
+  else cout << "OHHO\n";
+
 
   return 0;
 }
