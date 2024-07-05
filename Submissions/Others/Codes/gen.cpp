@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-const int N = 10;
+const int N = 8;
 
 // NEVER use rand() function because rand() will always generate same random values even if you run the same code multiple times
 mt19937_64 rnd(chrono::steady_clock::now().time_since_epoch().count()); // using current time as seed, so it will always generate different random values if you run this code multiple times
@@ -15,8 +15,11 @@ int32_t main() {
   cin.tie(0);
 
   int n = get_rand(1, N);
-  cout << n << '\n';
-  
+  int m = get_rand(2, 4);
+  cout << n << ' ' << m << '\n';
+  for (int i = 1; i <= n; i++) {
+    cout << get_rand(0, m - 1) << ' ';
+  }
   
   
   return 0;
