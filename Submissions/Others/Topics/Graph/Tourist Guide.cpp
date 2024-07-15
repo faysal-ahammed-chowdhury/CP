@@ -3,10 +3,10 @@ using namespace std;
 
 const int N = 100 + 9;
 vector<int> g[N];
-int disc[N], low[N], timer;
+int disc[N], low[N], timer, n;
 vector<bool> vis(N, false), is_ap(N, false);
 
-void find_ap(int u, int p) {
+void ap_dfs(int u, int p) {
   disc[u] = low[u] = ++timer;
   vis[u] = true;
   int children_cnt = 0;
@@ -14,7 +14,7 @@ void find_ap(int u, int p) {
     if (v == p) continue;
     if (vis[v]) low[u] = min(low[u], disc[v]);
     else {
-      find_ap(v, u);
+      ap_dfs(v, u);
       low[u] = min(low[u], low[v]);
       if (disc[u] <= low[v] and p != -1) is_ap[u] = true;
       children_cnt++;
@@ -23,12 +23,21 @@ void find_ap(int u, int p) {
   if (p == -1 and children_cnt > 1) is_ap[u] = true;
 }
 
+void find_articulation_points() { 
+  for (int u = 1; u <= n; u++) {
+    if (!vis[u]) {
+      timer = 0;
+      ap_dfs(u, -1);
+    }
+  }
+}
+
 int cs;
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-  int n, first = true;
+  int first = true;
   while (cin >> n and n) {
     if (!first) cout << '\n';
     first = false;
@@ -44,12 +53,7 @@ int32_t main() {
       g[mp1[u]].push_back(mp1[v]);
       g[mp1[v]].push_back(mp1[u]);
     }
-    for (int u = 1; u <= n; u++) {
-      if (!vis[u]) {
-        timer = 0;
-        find_ap(u, -1);
-      }
-    }
+    find_articulation_points();
     vector<string> ans;
     for (int u = 1; u <= n; u++) if (is_ap[u]) ans.push_back(mp2[u]);
       sort(ans.begin(), ans.end());
