@@ -5,18 +5,7 @@ const int N = 1e5 + 9; // change here
 vector<int> g[N];
 int disc[N], low[N], timer, n, m;
 vector<bool> vis(N, false);
-map<pair<int, int>, bool> bridges;
-
-void IS_BRIDGE(int u, int v) {
-  if (bridges.find(make_pair(u, v)) != bridges.end()) {
-    bridges.erase(make_pair(u, v));
-    bridges.erase(make_pair(v, u));
-  }
-  else {
-    bridges[(make_pair(u, v))] = true;
-    bridges[(make_pair(v, u))] = true;
-  }
-}
+map<pair<int, int>, int> bridges;
 
 void bridges_dfs(int u, int p) { // find bridges
   disc[u] = low[u] = ++timer;
@@ -27,7 +16,10 @@ void bridges_dfs(int u, int p) { // find bridges
     else {
       bridges_dfs(v, u);
       low[u] = min(low[u], low[v]);
-      if (disc[u] < low[v]) IS_BRIDGE(u, v);
+      if (disc[u] < low[v]) {
+        bridges[(make_pair(u, v))]++;
+        bridges[(make_pair(v, u))]++;
+      }
     }
   }
 }
