@@ -6,13 +6,13 @@ const int N = 82, MAX = 1e4 + 9, inf = 1e18;
 pair<int, int> a[N];
 int n, x, y, dp[N][N][MAX];
 
-int f(int i, int nibo, int sweet) {
-  if (i == n + 1) return nibo == 0 ? 0 : inf;
-  int &ans = dp[i][nibo][sweet];
+int f(int i, int baki, int sweet) {
+  if (i == n + 1) return baki == 0 ? 0 : inf;
+  int &ans = dp[i][baki][sweet];
   if (ans != -1) return ans;
-  ans = f(i + 1, nibo, sweet);
-  if (nibo > 0 and sweet - a[i].first >= 0) {
-    ans = min(ans, a[i].second + f(i + 1, nibo - 1, sweet - a[i].first));
+  ans = f(i + 1, baki, sweet);
+  if (baki > 0 and sweet - a[i].first >= 0) {
+    ans = min(ans, a[i].second + f(i + 1, baki - 1, sweet - a[i].first));
   }
   return ans;
 }
