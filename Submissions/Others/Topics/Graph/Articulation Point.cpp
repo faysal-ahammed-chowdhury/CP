@@ -14,7 +14,7 @@ void ap_dfs(int u, int p) {
     if (v == p) continue;
     if (vis[v]) low[u] = min(low[u], disc[v]);
     else {
-      art_dfs(v, u);
+      ap_dfs(v, u);
       low[u] = min(low[u], low[v]);
       if (disc[u] <= low[v] and p != -1) is_ap[u] = true;
       children_cnt++;
