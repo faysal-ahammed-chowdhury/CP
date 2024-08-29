@@ -17,8 +17,7 @@ void bridges_dfs(int u, int p) { // find bridges
       bridges_dfs(v, u);
       low[u] = min(low[u], low[v]);
       if (disc[u] < low[v]) {
-        bridges[(make_pair(u, v))]++;
-        bridges[(make_pair(v, u))]++;
+        bridges[(make_pair(min(u, v), max(u, v)))]++;
       }
     }
   }
