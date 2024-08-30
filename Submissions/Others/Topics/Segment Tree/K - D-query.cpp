@@ -57,12 +57,12 @@ int main() {
 
   st.build(1, 1, n);
 
-  map<int, int> mp;
+  map<int, int> last_idx;
   for(int r = 1; r <= n; r++) {
-    if(mp.find(a[r]) != mp.end()) {
-      st.upd(1, 1, n, mp[a[r]], -1);
+    if(last_idx.find(a[r]) != last_idx.end()) {
+      st.upd(1, 1, n, last_idx[a[r]], -1);
     }
-    mp[a[r]] = r;
+    last_idx[a[r]] = r;
     st.upd(1, 1, n, r, 1);
 
 
