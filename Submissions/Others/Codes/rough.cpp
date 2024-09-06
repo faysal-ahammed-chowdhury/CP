@@ -1,23 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define int long long
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-  int n; cin >> n;
+  int n, k; cin >> n >> k;
   int a[n + 1];
   for (int i = 1; i <= n; i++) {
     cin >> a[i];
   }
-  int ans = 0, p = 0, q = 0;
+  vector<int> v;
   for (int i = 1; i <= n; i++) {
     for (int j = i + 1; j <= n; j++) {
-      p += a[i] * a[j];
-      q++;
+      v.push_back(a[i] * a[j]);
     }
   }
-  cout << p << ' ' << q << '\n';
+  sort(v.begin(), v.end());
+  for (auto x : v) {
+    cout << x << '\n';
+  }
 
   return 0;
 }
