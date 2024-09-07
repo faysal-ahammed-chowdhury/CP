@@ -1,26 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define int long long
-int32_t main() {
+const int N = 100000000;
+vector<bool> is_prime(N, true);
+
+void sieve() {
+  is_prime[1] = false;
+  int lim = sqrt(N + 1);
+  for (int i = 2; i <= lim; i++) {
+    if (is_prime[i]) {
+      for (int j = i + i; j < N; j += i) {
+        is_prime[j] = false;
+      }
+    }
+  }
+}
+
+int main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-  int n, k; cin >> n >> k;
-  int a[n + 1];
-  for (int i = 1; i <= n; i++) {
-    cin >> a[i];
-  }
-  vector<int> v;
-  for (int i = 1; i <= n; i++) {
-    for (int j = i + 1; j <= n; j++) {
-      v.push_back(a[i] * a[j]);
+  sieve();
+
+  vector<int> primes;
+  for (int i = 1; i < N; i++) {
+    if (is_prime[i]) {
+      primes.push_back(i);
     }
   }
-  sort(v.begin(), v.end());
-  for (auto x : v) {
-    cout << x << '\n';
+
+  int last = 0;
+  int mx = 0;
+  for (auto p : primes) {
+    mx = max(mx, p - last);
+    last = p;
   }
+  cout << mx << '\n';
 
   return 0;
 }
