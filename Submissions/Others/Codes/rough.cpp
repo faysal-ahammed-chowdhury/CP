@@ -1,41 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int N = 100000000;
-vector<bool> is_prime(N, true);
+typedef long long ll;
+int a, b, q, lc, x;
 
-void sieve() {
-  is_prime[1] = false;
-  int lim = sqrt(N + 1);
-  for (int i = 2; i <= lim; i++) {
-    if (is_prime[i]) {
-      for (int j = i + i; j < N; j += i) {
-        is_prime[j] = false;
-      }
-    }
-  }
+int __lcm(int a, int b) {
+  return (1ll * a * b) / __gcd(a, b);
 }
 
-int main() {
+ll get(ll r) {
+  ll ans = 0;
+  ll cnt = r / lc, rem = r % lc;
+  ans += cnt * x;
+  for (int i = r - rem + 1; i <= r; i++) {
+    if (((i % a) % b) != ((i % b) % a)) ans++;
+  }
+  return ans;
+}
+
+void solve() {
+  cin >> a >> b >> q;
+  lc = __lcm(a, b);
+  x = 0;
+  for (int i = 1; i <= lc; i++) {
+    if (((i % a) % b) != ((i % b) % a)) x++;
+  }
+  ll l = 1, r = 64; ;
+  ll cur = get(r) - get(l - 1);
+  cout << lc << ' ';
+  cout << cur << ' ';
+}
+
+int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-  sieve();
-
-  vector<int> primes;
-  for (int i = 1; i < N; i++) {
-    if (is_prime[i]) {
-      primes.push_back(i);
-    }
+  int t = 1; cin >> t;
+  while (t--) {
+    solve();
   }
-
-  int last = 0;
-  int mx = 0;
-  for (auto p : primes) {
-    mx = max(mx, p - last);
-    last = p;
-  }
-  cout << mx << '\n';
 
   return 0;
 }
