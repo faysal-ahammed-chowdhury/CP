@@ -29,7 +29,7 @@ void solve() {
   cout << k << '\n';
   for (int j = 1; j <= k; j++) {
     int idx = *lasts.begin();
-    while (i <= idx and i <= n and j <= k) {
+    while (i <= idx) {
       if (taken.find(a[i]) == taken.end()) {
         cnt[a[i]]++;
         se.insert(a[i]);
@@ -39,28 +39,18 @@ void solve() {
 
     int mx = *se.rbegin();
     int mn = *se.begin();
+    int val = (j & 1 ? mx : mn);
     idx = -1;
-    if (j % 2 == 1) {
-      cout << mx << ' ';
-      idx = indices[mx].front();
-      se.erase(mx);
-      taken.insert(mx);
-      lasts.erase(last[mx]);
-    }
-    else {
-      cout << mn << ' ';
-      idx = indices[mn].front();
-      se.erase(mn);
-      taken.insert(mn);
-      lasts.erase(last[mn]);
-    }
+    cout << val << ' ';
+    idx = indices[val].front();
+    se.erase(val);
+    taken.insert(val);
+    lasts.erase(last[val]);
 
     while (ii <= idx) {
       cnt[a[ii]]--;
-      if (cnt[a[ii]] <= 0) {
-        se.erase(a[ii]);
-      }
-      if (!indices[under[ii]].empty()) indices[under[ii]].pop();
+      if (cnt[a[ii]] == 0) se.erase(a[ii]);
+      indices[under[ii]].pop();
       ii++;
     }
   }
