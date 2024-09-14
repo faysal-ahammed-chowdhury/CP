@@ -24,9 +24,9 @@ int fun(int mask) {
           SET(now_mask, j);
           now_mask |= same_line[i][j];
           ans = min(ans, 1 + fun(now_mask));
-          break;
         }
       }
+      break;
     }
   }
   return ans;
