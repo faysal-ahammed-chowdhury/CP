@@ -20,9 +20,10 @@ int fun(int mask) {
       int new_mask = mask | (1 << i);
       for (int j = 1; j <= n; j++) {
         if (!CHECK(new_mask, j)) {
-          SET(new_mask, j);
-          new_mask |= same_line[i][j];
-          ans = min(ans, 1 + fun(new_mask));
+          int now_mask = new_mask;
+          SET(now_mask, j);
+          now_mask |= same_line[i][j];
+          ans = min(ans, 1 + fun(now_mask));
           break;
         }
       }
