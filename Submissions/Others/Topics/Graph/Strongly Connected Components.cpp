@@ -2,7 +2,7 @@
 using namespace std;
 
 const int N = 1e5 + 9; // change here
-vector<int> g[N], gT[N], cond_g[N];
+vector<int> g[N], gT[N], G[N];
 vector<bool> vis(N, false);
 vector<vector<int>> components;
 vector<int> order;
@@ -56,7 +56,7 @@ void scc() {
   for (int u = 1; u <= n; u++) {
     for (auto v : g[u]) {
       if (roots[u] != roots[v]) {
-        cond_g[roots[u]].push_back(roots[v]);
+        G[roots[u]].push_back(roots[v]);
       }
     }
   }
@@ -65,6 +65,8 @@ void scc() {
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
+
+  // when you need to use condensed graph, use it carefully (Specially g->G, i->roots[i])
 
   return 0;
 }
