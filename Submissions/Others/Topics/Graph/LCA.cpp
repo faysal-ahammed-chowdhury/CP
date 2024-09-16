@@ -80,7 +80,7 @@ void solve() {
       g[v].push_back(i);
     }
   }
-  dfs(1, 0);
+  dfs(1, 0); // change root if needed
 
   int q; cin >> q;
   cout << "Case " << ++cs << ":\n";
