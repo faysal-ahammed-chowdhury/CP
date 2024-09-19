@@ -14,13 +14,11 @@ int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-  int n = get_rand(2, N);
   cout << 1 << '\n';
-  cout << n << '\n';
-  for (int i = 1; i <= n; i++) {
-    cout << get_rand(0, 500) << ' ';
-  }
-  cout << '\n';
+  int a = get_rand(1, N);
+  int b = get_rand(1, N);
+  int l = get_rand(1, N * N);
+  cout << a << ' ' << b << ' ' << l << '\n';
 
   return 0;
 }
