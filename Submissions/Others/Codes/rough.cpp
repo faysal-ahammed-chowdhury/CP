@@ -1,34 +1,98 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef long long ll;
-int a, b, q, lc, x;
+const int N = 10;
+int n, ans;
 
-int __lcm(int a, int b) {
-  return (1ll * a * b) / __gcd(a, b);
+bool ok(vector<string> &a) {
+  for (int i = 1; i <= n; i++) {
+    bool flag = true;
+    for (int j = 1; j <= n; j++) {
+      flag &= a[i][j] == '#';
+    }
+    if (flag) return false;
+  }
+  for (int j = 1; j <= n; j++) {
+    bool flag = true;
+    for (int i = 1; i <= n; i++) {
+      flag &= a[i][j] == '#';
+    }
+    if (flag) return false;
+  }
+  bool flag = true;
+  for (int i = 1; i <= n; i++) {
+    flag &= a[i][i] == '#';
+  }
+  if (flag) return false;
+  flag = true;
+  for (int i = n, j = 1; i >= 1; i--, j++) {
+    flag &= a[j][i] == '#';
+  }
+  if (flag) return false;
+  return true;
 }
 
-ll get(ll r) {
-  ll ans = 0;
-  ll cnt = r / lc, rem = r % lc;
-  ans += cnt * x;
-  for (int i = r - rem + 1; i <= r; i++) {
-    if (((i % a) % b) != ((i % b) % a)) ans++;
+int get(vector<string> &a) {
+  int ans = 0;
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= n; j++) {
+      ans += a[i][j] == '#';
+    }
   }
   return ans;
 }
 
-void solve() {
-  cin >> a >> b >> q;
-  lc = __lcm(a, b);
-  x = 0;
-  for (int i = 1; i <= lc; i++) {
-    if (((i % a) % b) != ((i % b) % a)) x++;
+void f(int i, int j, vector<string> &a) {
+  if (i > n) {
+    // cout << "Here: " << get(a) << ' ' << ok(a) << '\n';
+    // for (int i = 1; i <= n; i++) {
+    //   for (int j =1; j <= n; j++) {
+    //     cout << a[i][j];
+    //   }
+    //   cout << '\n';
+    // }
+    if (ok(a)) {
+      if (ans < 30 and get(a) == 30) {
+        cout << "Here: " << get(a) << ' ' << ok(a) << '\n';
+        for (int i = 1; i <= n; i++) {
+          for (int j = 1; j <= n; j++) {
+            cout << a[i][j];
+          }
+          cout << '\n';
+        }
+      }
+      ans = max(ans, get(a));
+    }
+    return;
   }
-  ll l = 1, r = 64; ;
-  ll cur = get(r) - get(l - 1);
-  cout << lc << ' ';
-  cout << cur << ' ';
+  if (j + 1 <= n) {
+    f(i, j + 1, a);
+    a[i][j] = '#';
+    f(i, j + 1, a);
+    a[i][j] = '.';
+  }
+  else {
+    f(i + 1, 1, a);
+    a[i][j] = '#';
+    f(i + 1, 1, a);
+    a[i][j] = '.';
+  }
+}
+
+void solve() {
+  vector<string> a(N);
+  cin >> n;
+  for (int i = 1; i <= n; i++) {
+    a[i] = "!";
+    for (int j = 1; j <= n; j++) {
+      a[i] += '.';
+    }
+  }
+  ans = 0;
+  f(1, 1, a);
+  // a[1][2] = '#';
+  // a[2][1] = '#';
+  cout << ans << '\n';
 }
 
 int32_t main() {
