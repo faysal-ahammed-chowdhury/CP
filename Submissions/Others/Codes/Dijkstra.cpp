@@ -6,24 +6,22 @@ const int N = 1e5 + 9, inf = 1e9; // change here
 vector<pii> g[N];
 int n, m;
 
-void dijkstra(int u, vector<int> &dis) {
-  for (int i = 0; i <= n; i++) {
-    dis[i] = inf;
-  }
-  dis[u] = 0;
+auto dijkstra(int s) {
+  vector<int> dis(n + 1, inf);
+  dis[s] = 0;
   priority_queue<pii, vector<pii>, greater<pii>> pq;
-  pq.push({0, u});
+  pq.push({0, s});
   while (!pq.empty()) {
-    int d = pq.top().first;
-    int selected_node = pq.top().second;
+    auto [d, u] = pq.top();
     pq.pop();
-    for (auto [v, w] : g[selected_node]) {
+    for (auto [v, w] : g[u]) {
       if (dis[v] > d + w) {
         dis[v] = d + w;
         pq.push({dis[v], v});
       }
     }
   }
+  return dis;
 }
 
 int32_t main() {
