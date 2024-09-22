@@ -1,15 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 
-typedef pair<int, int> pii;
 const int N = 1e5 + 9, inf = 1e9; // change here
-vector<pii> g[N];
+vector<array<int, 2>> g[N];
 int n, m;
 
 auto dijkstra(int s) {
   vector<int> dis(n + 1, inf);
   dis[s] = 0;
-  priority_queue<pii, vector<pii>, greater<pii>> pq;
+  priority_queue<array<int, 2>, vector<array<int, 2>>, greater<array<int, 2>>> pq;
   pq.push({0, s});
   while (!pq.empty()) {
     auto [d, u] = pq.top();
