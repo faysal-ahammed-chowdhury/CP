@@ -9,8 +9,8 @@ vector<ll> dis(N, inf);
 int n, m;
 bool cycle;
 
-void bellman_ford(int src) {
-  dis[src] = 0;
+void bellman_ford(int s) {
+  dis[s] = 0;
   for (int i = 1; i <= n; i++) {
     for (int u = 1; u <= n; u++) {
       for (auto [v, w] : g[u]) {
