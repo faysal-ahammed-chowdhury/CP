@@ -14,7 +14,7 @@ bool bellman_ford(int s) {
   for (int i = 1; i <= n; i++) {
     for (int u = 1; u <= n; u++) {
       for (auto [v, w] : g[u]) {
-        if (dis[v] > dis[u] + w and dis[u] != inf) {
+        if (dis[v] > dis[u] + w) {
           if (i == n) has_cycle = true;
           dis[v] = dis[u] + w;
         }
