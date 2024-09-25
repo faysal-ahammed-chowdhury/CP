@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 
-using ll = long long;
-const int N = 1005;
+const int N = 1005; // change here
 const ll inf = 1e18;
 vector<pair<int, int>> g[N];
 vector<ll> dis(N, inf);
