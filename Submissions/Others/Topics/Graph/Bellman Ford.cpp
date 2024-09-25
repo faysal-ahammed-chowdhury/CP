@@ -4,7 +4,7 @@ typedef long long ll;
 
 const int N = 1005; // change here
 const ll inf = 1e18;
-vector<pair<int, int>> g[N];
+vector<array<int, 2>> g[N];
 vector<ll> dis(N, inf);
 int n, m;
 bool cycle;
