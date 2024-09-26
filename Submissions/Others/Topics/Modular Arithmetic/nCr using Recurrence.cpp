@@ -8,7 +8,7 @@ void prec() { // O(n^2)
   for (int i = 0; i < N; i++) {
     C[i][i] = 1;
     for (int j = 0; j < i; j++) {
-      C[i][j] = C[i - 1][j] + C[i - 1][j - 1];
+      C[i][j] = (C[i - 1][j] + C[i - 1][j - 1]) % mod;
     }
   }
 
