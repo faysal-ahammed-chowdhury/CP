@@ -4,38 +4,39 @@ using namespace std;
 const int N = 30005;
 int a[N];
 
-vector<int> merge(vector<int> &a, vector<int> &b) {
-  int i = 0, j = 0;
-  int n = a.size(), m = b.size();
-  vector<int> ans;
-  while (i < n and j < m) {
-    if (a[i] <= b[j]) {
+struct MST { // merge sort tree
+  vector<int> tree[4 * N];
+
+  vector<int> merge(vector<int> &a, vector<int> &b) {
+    int i = 0, j = 0;
+    int n = a.size(), m = b.size();
+    vector<int> ans;
+    while (i < n and j < m) {
+      if (a[i] <= b[j]) {
+        ans.push_back(a[i]);
+        i++;
+      }
+      else {
+        ans.push_back(b[j]);
+        j++;
+      }
+    }
+    while (i < n) {
       ans.push_back(a[i]);
       i++;
     }
-    else {
+    while (j < m) {
       ans.push_back(b[j]);
       j++;
     }
+    return ans;
   }
-  while (i < n) {
-    ans.push_back(a[i]);
-    i++;
-  }
-  while (j < m) {
-    ans.push_back(b[j]);
-    j++;
-  }
-  return ans;
-}
 
-struct MST { // merge sort tree
-  vector<int> tree[4 * N];
   void build(int n, int b, int e) {
-    if(b == e) {
+    if (b == e) {
       vector<int> v;
       v.push_back(a[b]);
-      tree[n] = v; 
+      tree[n] = v;
       return;
     }
     int mid = (b + e) >> 1, l = n << 1, r = l + 1;
@@ -43,10 +44,10 @@ struct MST { // merge sort tree
     build(r, mid + 1, e);
     tree[n] = merge(tree[l], tree[r]);
   }
- 
+
   int query(int n, int b, int e, int i, int j, int k) {
-    if(b > j || e < i) return 0; 
-    if(b >= i && e <= j) {
+    if (b > j || e < i) return 0;
+    if (b >= i && e <= j) {
       int idx = tree[n].end() - upper_bound(tree[n].begin(), tree[n].end(), k);
       return idx;
     }
