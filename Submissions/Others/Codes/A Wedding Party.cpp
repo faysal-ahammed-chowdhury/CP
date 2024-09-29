@@ -5,23 +5,38 @@ typedef long long ll;
 bool CHECK(int N, int pos) { return (bool)(N & (1 << pos)); }
 void SET(int &N, int pos) { (N |= (1 << pos)); }
 
+struct custom_hash {
+  static uint64_t splitmix64(uint64_t x) {
+    // http://xorshift.di.unimi.it/splitmix64.c
+    x += 0x9e3779b97f4a7c15;
+    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+    x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+    return x ^ (x >> 31);
+  }
+
+  size_t operator()(uint64_t x) const {
+    static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+    return splitmix64(x + FIXED_RANDOM);
+  }
+};
+
 const int N = 505, S = 16;
 const ll inf = 1e18;
 int n, m, ss;
 vector<array<int, 2>> g[N];
-ll dis[N][N];
+unordered_map<int, vector<ll>, custom_hash> dis;
 vector<int> stops(N);
 pair<int, ll> dp[(1 << S) + 3][S];
 
 void dijkstra(int s) {
-  vector<bool> vis(n + 1, false);
+  dis[s].resize(n + 1);
+  fill(dis[s].begin(), dis[s].end(), inf);
   dis[s][s] = 0;
   priority_queue<array<int, 2>, vector<array<int, 2>>, greater<array<int, 2>>> pq;
   pq.push({0, s});
   while (!pq.empty()) {
     auto [d, u] = pq.top(); pq.pop();
-    if (vis[u]) continue;
-    vis[u] = true;
+    if (dis[s][u] < d) continue;
     for (auto [v, w] : g[u]) {
       if (dis[s][v] > d + w) {
         dis[s][v] = d + w;
@@ -60,9 +75,6 @@ void solve() {
   stops.clear();
   for (int i = 0; i <= n; i++) {
     g[i].clear();
-    for (int j = 0; j <= n; j++) {
-      dis[i][j] = inf;
-    }
   }
 
   bool has_stops_in_1 = false;
@@ -79,8 +91,8 @@ void solve() {
     g[u].push_back({v, w});
   }
 
-  for (int i = 1; i <= n; i++) {
-    dijkstra(i);
+  for (auto u : stops) {
+    dijkstra(u);
   }
 
   memset(dp, -1, sizeof dp);
