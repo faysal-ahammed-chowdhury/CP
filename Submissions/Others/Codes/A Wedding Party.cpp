@@ -49,11 +49,9 @@ void dijkstra(int s) {
 pair<int, ll> f(int mask, int last) {
   if (dp[mask][last].first != -1) return dp[mask][last];
   ll ans1 = 0, ans2 = dis[stops[last]][n];
-  bool flag = true;
   for (int i = 0; i < stops.size(); i++) {
     int v = stops[i];
     if (CHECK(mask, i) == false and dis[stops[last]][v] < inf) {
-      flag = false;
       int new_mask = mask | (1 << i);
       auto cur = f(new_mask, i);
       if (cur.first + 1 == ans1) {
