@@ -18,7 +18,7 @@ int32_t main() {
   int ans = 0;
   for (auto [c, a] : v) {
     gc = __gcd(gc, a);
-    if (n % gc != 0 or gc == 1) {
+    if (gc == 1) {
       ans += c * (tmp - 1);
       cout << ans << '\n';
       return 0;
