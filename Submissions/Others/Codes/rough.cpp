@@ -1,45 +1,96 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define int long long
 
-// if we need phi(x) multiple times, then memorize it
-map<int, int> dp;
-int phi(int n) {
-  if (dp.count(n)) return dp[n];
-  int ans = n, m = n;
-  for (int i = 2; i * i <= m; i++) {
-    if (m % i == 0) {
-      while (m % i == 0) m /= i;
-      ans = ans / i * (i - 1);
-    }
-  }
-  if (m > 1) ans = ans / m * (m - 1);
-  return dp[n] = ans;
+#define int short
+
+const int N = 505;
+string s;
+int n, k, dp[N][N][N];
+bool is_special[N];
+
+int max(int a, int b) {
+  return a > b ? a : b;
 }
 
-int cs;
-void solve() {
-  int n, q; cin >> n >> q;
-  cout << "Case " << ++cs << ": ";
-  while (q--) {
-    int m; cin >> m;
-    if (n % m == 0) {
-      int x = n / m;
-      cout << phi(x) << ' ';
+int f(int i, int j, int cnt0, int cnt1) {
+  if (i == j) return 1;
+  if (i > j) return 0;
+
+  int &ans = dp[i][j][cnt0];
+  if (ans != -1) return ans;
+
+  ans = 0;
+  if (is_special[i] and is_special[j]) {
+    if (cnt0 >= 2) {
+      ans = max(ans, 2 + f(i + 1, j - 1, cnt0 - 2, cnt1));
     }
-    else cout << 0 << ' ';
+    if (cnt1 >= 2) {
+      ans = max(ans, 2 + f(i + 1, j - 1, cnt0, cnt1 - 2));
+    }
+    if (cnt0 >= 1) {
+      ans = max(ans, f(i + 1, j, cnt0 - 1, cnt1));
+      ans = max(ans, f(i, j - 1, cnt0 - 1, cnt1));
+    }
+    if (cnt1 >= 1) {
+      ans = max(ans, f(i + 1, j, cnt0, cnt1 - 1));
+      ans = max(ans, f(i, j - 1, cnt0, cnt1 - 1));
+    }
   }
-  cout << '\n';
+  else if (is_special[i]) {
+    if (s[j] == '1' and cnt1 >= 1) {
+      ans = max(ans, 2 + f(i + 1, j - 1, cnt0, cnt1 - 1));
+    }
+    if (s[j] == '0' and cnt0 >= 1) {
+      ans = max(ans, 2 + f(i + 1, j - 1, cnt0 - 1, cnt1));
+    }
+    ans = max(ans, f(i, j - 1, cnt0, cnt1));
+    if (cnt0 >= 1) {
+      ans = max(ans, f(i + 1, j, cnt0 - 1, cnt1));
+    }
+    if (cnt1 >= 1) {
+      ans = max(ans, f(i + 1, j, cnt0, cnt1 - 1));
+    }
+  }
+  else if (is_special[j]) {
+    if (s[i] == '1' and cnt1 >= 1) {
+      ans = max(ans, 2 + f(i + 1, j - 1, cnt0, cnt1 - 1));
+    }
+    if (s[i] == '0' and cnt0 >= 1) {
+      ans = max(ans, 2 + f(i + 1, j - 1, cnt0 - 1, cnt1));
+    }
+    ans = max(ans, f(i + 1, j, cnt0, cnt1));
+    if (cnt0 >= 1) {
+      ans = max(ans, f(i, j - 1, cnt0 - 1, cnt1));
+    }
+    if (cnt1 >= 1) {
+      ans = max(ans, f(i, j - 1, cnt0, cnt1 - 1));
+    }
+  }
+  else {
+    if (s[i] == s[j]) ans = max(ans, 2 + f(i + 1, j - 1, cnt0, cnt1));
+    ans = max(ans, f(i + 1, j, cnt0, cnt1));
+    ans = max(ans, f(i, j - 1, cnt0, cnt1));
+  }
+  return ans;
 }
 
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-  int t; cin >> t;
-  while (t--) {
-    solve();
+  cin >> s >> k;
+  n = s.size();
+  s = '.' + s;
+  int cnt0 = 0, cnt1 = 0;
+  for (int i = 1; i <= k; i++) {
+    int x; cin >> x;
+    is_special[x] = 1;
+    cnt0 += s[x] == '0';
+    cnt1 += s[x] == '1';
   }
+
+  memset(dp, -1, sizeof dp);
+  cout << f(1, n, cnt0, cnt1) << '\n';
 
   return 0;
 }
