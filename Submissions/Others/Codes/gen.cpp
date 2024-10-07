@@ -15,12 +15,12 @@ int32_t main() {
   cin.tie(0);
 
   int n = get_rand(2, N);
-  int m = get_rand(1, N);
-  cout << n << ' ' << m << '\n';
-  while (m--) {
-    int a = get_rand(1, n - 1);
-    int c = get_rand(1, N);
-    cout << a << ' ' << c << '\n';
+  cout << n << '\n';
+  while (n--) {
+    int x = get_rand(0, 2);
+    if (x == 0) cout << '(';
+    else if (x == 1) cout << ')';
+    else if (x == 2) cout << '?';
   }
  
   return 0;

@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-const int ITER = 1000; // select the number of iterations
+const int ITER = 10000; // select the number of iterations
 
 // populate and save the brute, code and gen files
 int32_t main() {

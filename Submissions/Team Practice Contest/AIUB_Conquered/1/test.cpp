@@ -19,7 +19,7 @@ int beauty(string &s) {
 void f(int i, string &s) {
   if (i > n) {
     ans = min(ans, beauty(s));
-    // if (beauty(s) == 10)cout << s << '\n';
+    if (beauty(s) == 10)cout << s << '\n';
     return;
   }
   if (s[i] == '?') {
