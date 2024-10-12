@@ -1,37 +1,22 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define int long long
 
-int n, ans;
-string s;
+int n, k, s, up;
 
-int beauty(string &s) {
-  int cnt = 0, ans = 0;
-  for (auto c : s) {
-    if (c == '(') cnt++;
-    else if (cnt > 0) {
-      cnt--;
-      ans += 2;
-    }
-  }
-  return ans;
-}
-
-void f(int i, string &s) {
+void f(int i, multiset<int> &ms) {
   if (i > n) {
-    ans = min(ans, beauty(s));
-    // if (beauty(s) == 10)cout << s << '\n';
+    set<int> se;
+    for (auto x : ms) {
+      se.insert(x);
+    }
+    if (se.size() >= k) up++;
     return;
   }
-  if (s[i] == '?') {
-    s[i] = '(';
-    f(i + 1, s);
-    s[i] = '?';
-    s[i] = ')';
-    f(i + 1, s);
-    s[i] = '?';
-  }
-  else {
-    f(i + 1, s);
+  for (int j = 1; j <= s; j++) {
+    ms.insert(j);
+    f(i + 1, ms);
+    ms.erase(ms.find(j));
   }
 }
 
@@ -39,9 +24,13 @@ int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-  cin >> n >> s;
-  ans = 1e9;
-  f(1, s);
+  cin >> n >> s >> k;
+  multiset<int> ms;
+  f(1, ms);
+  int down = pow(s, n);
+  double ans = double(up)/down;
+  cout << fixed << setprecision(10);
+  // cout << up << ' ' << down << ' ';
   cout << ans << '\n';
 
   return 0;
