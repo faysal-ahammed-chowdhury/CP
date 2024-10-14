@@ -13,9 +13,9 @@ struct custom_hash {
     return x ^ (x >> 31);
   }
 
-  size_t operator()(pair<int, int> x) const {
+  size_t operator()(pair<uint64_t, uint64_t> x) const {
     static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-    return splitmix64((x.first + FIXED_RANDOM) ^ x.second + FIXED_RANDOM);
+    return splitmix64(x.first + FIXED_RANDOM) ^ (splitmix64(x.second + FIXED_RANDOM) >> 1);
   }
 };
 
@@ -85,6 +85,7 @@ struct Hashing {
 Hashing hs[105];
 int n, mx;
 string s[105];
+gp_hash_table<pair<int, int>, pair<int, int>, custom_hash> idx;
 
 bool ok(int len) {
   gp_hash_table<pair<int, int>, int, custom_hash> mp;
@@ -118,11 +119,11 @@ int lcp(int first, int second, int i, int j, int x, int y) {
 
 struct cmp {
   bool operator()(const pair<int, int> &a, const pair<int, int> &b) const {
-    int first = a.first;
-    int i = a.second;
+    int first = idx[a].first;
+    int i = idx[a].second;
     int j = i + mx - 1;
-    int second = b.first;
-    int x = b.second;
+    int second = idx[b].first;
+    int x = idx[b].second;
     int y = x + mx - 1;
     int common_prefix = lcp(first, second, i, j, x, y);
     int len1 = j - i + 1, len2 = y - x + 1;
@@ -173,13 +174,15 @@ int32_t main() {
         if (tmp.find(hs[i].get_hash(j, j + len - 1)) != tmp.end()) continue;
         mp[hs[i].get_hash(j, j + len - 1)]++;
         if (mp[hs[i].get_hash(j, j + len - 1)] > (n / 2)) {
-          se.insert({i, j});
+          idx[hs[i].get_hash(j, j + len - 1)] = {i, j};
+          se.insert(hs[i].get_hash(j, j + len - 1));
         }
         tmp[(hs[i].get_hash(j, j + len - 1))] = 1;
       }
     }
 
-    for (auto [i, l] : se) {
+    for (auto hash : se) {
+      auto [i, l] = idx[hash];
       int r = l + len - 1;
       for (int j = l; j <= r; j++) {
         cout << s[i][j - 1];
