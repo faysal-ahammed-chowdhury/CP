@@ -12,7 +12,7 @@ int a[N];
 struct MST { // merge sort tree
   o_set<array<int, 2>> tree[4 * N];
 
-  o_set<array<int, 2>> merge(o_set<array<int, 2>> a, o_set<array<int, 2>> b) {
+  o_set<array<int, 2>> merge(o_set<array<int, 2>> &a, o_set<array<int, 2>> &b) {
     int i = 0, j = 0;
     int n = a.size(), m = b.size();
     o_set<array<int, 2>> ans;
