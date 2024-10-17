@@ -65,6 +65,7 @@ int32_t main() {
   for (int i = 1; i <= n; i++) {
     cin >> a[i];
   }
+  
   mst.build(1, 1, n);
   while (q--) {
     int i, j, k; cin >> i >> j >> k;
