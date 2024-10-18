@@ -50,6 +50,7 @@ struct ST {
     return max(L, R);
   }
   int get_first(int n, int b, int e, int l, int r, int x) {
+    push(n, b, e);
     if (b > r || e < l) return -1;
     if (tree[n] <= x) return -1;
 
