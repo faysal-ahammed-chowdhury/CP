@@ -32,6 +32,7 @@ void prec() {
     n = len;
     f(len, 1, 0);
   }
+  sort(v.begin(), v.end());
 }
 
 int cs;
@@ -40,7 +41,7 @@ void solve() {
   int ans = 0;
   for (int i = 1; i <= 9; i++) {
     if (i >= a and i <= b and i % m == 0) {
-      ans++;  
+      ans++;
     }
   }
   // for (auto x : v) {
@@ -65,7 +66,6 @@ void main_() {
   cin.tie(0);
 
   prec();
-  // cout << v.size() << '\n';
 
   int t = 1; cin >> t;
   while(t--) {
