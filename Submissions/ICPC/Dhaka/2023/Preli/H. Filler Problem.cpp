@@ -36,23 +36,6 @@ bitset<5005> dp[N][5005];
 //   return false;
 // }
 
-bool f(int to, int sum) { // optimized using bitset
-  for (int i = 1; i <= to; i++) {
-    for (int x = 0; x <= sum; x++) {
-      dp[i][x].reset();
-    }
-  }
-  dp[0][0][0] = 1;
-  for (int i = 1; i <= to; i++) {
-    for (int x = 0; x <= sum; x++) {
-      dp[i][x] = dp[i - 1][x];
-      if (x - a[i] >= 0) dp[i][x] |= dp[i - 1][x - a[i]];
-      dp[i][x] |= dp[i - 1][x] << a[i];
-    }
-  }
-  return dp[to][sum][sum];
-}
-
 int cs = 0;
 void solve() {
   cin >> n;
@@ -62,10 +45,23 @@ void solve() {
   for (int i = 1; i <= n; i++) {
     prefix[i] = prefix[i - 1] + a[i];
   }
+  for (int i = 1; i <= n; i++) {
+    for (int x = 0; x <= 5000; x++) {
+      dp[i][x].reset();
+    }
+  }
+  dp[0][0][0] = 1;
+  for (int i = 1; i <= n; i++) { // optimized using bitset
+    for (int x = 0; x <= 5000; x++) {
+      dp[i][x] = dp[i - 1][x];
+      if (x - a[i] >= 0) dp[i][x] |= dp[i - 1][x - a[i]];
+      dp[i][x] |= dp[i - 1][x] << a[i];
+    }
+  }
   cout << "Case " << ++cs << ":\n";
   for (int i = 1; i <= n; i++) {
     if (prefix[i] % 3 == 0) {
-      cout << f(i, prefix[i] / 3) << '\n';
+      cout << dp[i][prefix[i] / 3][prefix[i] / 3] << '\n';
     }
     else {
       cout << 0 << '\n';
