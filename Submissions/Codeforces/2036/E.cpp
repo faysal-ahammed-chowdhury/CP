@@ -16,7 +16,9 @@ int32_t main() {
   for (int i = 1; i <= m; i++) {
     for (int j = 1; j <= n; j++) {
       b[i][j] = b[i][j - 1] | a[i][j];
+      // cout << b[i][j] << ' ';
     }
+    // cout << '\n';
   }
 
   while (q--) {
@@ -44,7 +46,7 @@ int32_t main() {
         //   cout << x << ' ';
         // }
         // cout << '\n';
-        auto it = upper_bound(b[r].begin(), b[r].end(), val);
+        auto it = lower_bound(b[r].begin(), b[r].end(), val);
         int idx = it - b[r].begin() - 1;
         // cout << idx << '\n';
         mx = min(mx, idx);
