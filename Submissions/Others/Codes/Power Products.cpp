@@ -36,16 +36,8 @@ int32_t main() {
     }
   }
 
-  // for (int i = 1; i <= n; i++) {
-  //   cout << i << ":\n";
-  //   for (auto [p, pw] : pf[i]) {
-  //     cout << p << '^' << pw << '\n';
-  //   }
-  //   cout << '\n';
-  // }
-
-  long long ans = 0, full = 0;
-  int one = 0;
+  long long ans = 0;
+  int one = 0, full = 0;
   map<map<int, int>, int> mp;
   for (int i = 1; i <= n; i++) {
     map<int, int> need, tmp;
@@ -57,14 +49,12 @@ int32_t main() {
       need[p] = x;
     }
 
-    long long cur = 0;
-    if (pf[i].size() == 0 or need.size() == 0) cur += full + one;
-    else if (mp.find(need) != mp.end()) cur += mp[need];
-    
-    if (pf[i].size() != 0 and need.size() == 0) full++;
-    ans += cur;
-    mp[tmp]++;
+    if (pf[i].size() == 0 or need.size() == 0) ans += full + one;
+    else if (mp.find(need) != mp.end()) ans += mp[need];
+
+    full += pf[i].size() != 0 and need.size() == 0;
     one += pf[i].size() == 0;
+    mp[tmp]++;
   }
   cout << ans << '\n';
 
