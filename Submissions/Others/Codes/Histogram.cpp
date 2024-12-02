@@ -16,24 +16,33 @@ struct ST {
     build(r, mid + 1, e);
     tree[n] = min(tree[l], tree[r]);
   }
-  int query(int n, int b, int e, int i, int j) {
-    if (b > j || e < i) return inf;
-    if (b >= i && e <= j) return tree[n];
-    int mid = (b + e) >> 1, l = n << 1, r = l + 1;
-    int L = query(l, b, mid, i, j);
-    int R = query(r, mid + 1, e, i, j);
-    return min(L, R);
+  int get_first(int n, int b, int e, int l, int r, int x) {
+    if (b > r || e < l) return -1;
+    if (tree[n] >= x) return -1;
+
+    if (b == e) return b;
+
+    int tm = b + (e - b) / 2;
+    int left = get_first(2 * n, b, tm, l, r, x);
+    if (left != -1) return left;
+    return get_first(2 * n + 1, tm + 1, e, l , r, x);
+  }
+  int get_last(int n, int b, int e, int l, int r, int x) {
+    if (b > r || e < l) return -1;
+    if (tree[n] >= x) return -1;
+
+    if (b == e) return b;
+
+    int tm = b + (e - b) / 2;
+    int right = get_last(2 * n + 1, tm + 1, e, l , r, x);
+    if (right != -1) return right;
+    return get_last(2 * n, b, tm, l, r, x);
   }
 } st;
 
-int n; 
-bool ok(int i, int len, int val) {
-  return st.query(1, 1, n, i, i + len - 1) >= val;
-}
-
 int cs;
 void solve() {
-  cin >> n;
+  int n; cin >> n;
   for (int i = 1; i <= n; i++) {
     cin >> a[i];
   }
@@ -42,36 +51,18 @@ void solve() {
   int ans = 0;
   for (int i = 1; i <= n; i++) {
     int height = a[i];
-    
-    int l = 1, r = n - i + 1, right = i;
-    while (l <= r) {
-      int mid = (l + r) >> 1;
-      if (ok(i, mid, height)) {
-        right = i + mid - 1;
-        l = mid + 1;
-      }
-      else {
-        r = mid - 1;
-      }
-    }
 
-    l = 1, r = i; int left = i;
-    while (l <= r) {
-      int mid = (l + r) >> 1;
-      if (ok(i - mid + 1, mid, height)) {
-        left = i - mid + 1;
-        l = mid + 1;
-      }
-      else {
-        r = mid - 1;
-      }
-    }
+    int right = i, left = i;
+    int tmp = st.get_first(1, 1, n, i, n, a[i]);
+    right = (tmp == -1 ? n : tmp  - 1);
+    tmp = st.get_last(1, 1, n, 1, i, a[i]);
+    left = (tmp == -1 ? 1 : tmp + 1);
 
     int width = right - left + 1;
     int area = height * width;
     ans = max(ans, area);
   }
-  
+
   cout << "Case " << ++cs << ": " << ans << '\n';
 }
 
@@ -80,7 +71,7 @@ int32_t main() {
   cin.tie(0);
 
   int t = 1; cin >> t;
-  while(t--) {
+  while (t--) {
     solve();
   }
 
