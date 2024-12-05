@@ -1,27 +1,33 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef __int128 i128;
-typedef long long ll;
 
-const int N = 2e5 + 9; 
-const ll inf = 1e18 + 9; 
+const int N = 2e5 + 9, K = 20; // change here
+int a[N];
 
-int cs;
 void solve() {
   int n, q; cin >> n >> q;
-  ll a[n + 1];
   for (int i = 1; i <= n; i++) {
     cin >> a[i];
   }
   while (q--) {
-    ll l, r, m; cin >> l >> r >> m;
-    for (int i = l; i <= r; i++) {
-      a[i] /= m;
+    int l, r; cin >> l >> r;
+    bool all_same = true;
+    for (int i = l + 1; i <= r; i++) {
+      all_same &= a[i] == a[i - 1];
     }
-  }
-  cout << "Case " << ++cs << ": ";
-  for (int i = 1; i <= n; i++) {
-    cout << a[i] << ' ';
+    if (all_same) {
+      cout << 0 << ' ';
+      continue;
+    }
+    int ans = 1;
+    for (int x = 2; x <= 100; x++) {
+      bool ok = true;
+      for (int i = l; i <= r; i++) {
+        ok &= (a[i] % x) == (a[l] % x);
+      }
+      if (ok) ans = x;
+    }
+    cout << ans << ' ';
   }
   cout << '\n';
 }
@@ -31,7 +37,7 @@ int32_t main() {
   cin.tie(0);
 
   int t = 1; cin >> t;
-  while(t--) {
+  while (t--) {
     solve();
   }
 
