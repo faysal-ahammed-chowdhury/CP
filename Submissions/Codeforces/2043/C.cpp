@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-#define int long long
 
 const ll inf = 1e15;
 const int N = 2e5 + 9;
