@@ -81,14 +81,6 @@ struct Hashing {
   }
 };
 
-string s;
-Hashing hash_s;
-int n;
-
-bool ok(int l, int r) {
-  return hash_s.is_palindrome(l, r);
-}
-
 //array values can be negative too, use appropriate minimum and maximum value
 struct wavelet_tree {
   int lo, hi;
@@ -182,6 +174,14 @@ ll f(int x) {
 ll f(int l, int r) {
   if (l > r) return 0;
   return f(r) - f(l - 1);
+}
+
+string s;
+Hashing hash_s;
+int n;
+
+bool ok(int l, int r) {
+  return hash_s.is_palindrome(l, r);
 }
 
 int32_t main() {
