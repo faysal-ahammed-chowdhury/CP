@@ -1,14 +1,12 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-const int N = 3e5 + 9;
-const int MAXV = 1e9 + 9; //maximum value of any element in array
+const int N = 3e5 + 9, MAXV = 1e9 + 9; // change here
 
-//array values can be negative too, use appropriate minimum and maximum value
-struct wavelet_tree { // template from youknowwho
+struct wavelet_tree { 
   int lo, hi;
   wavelet_tree *l, *r;
-  int *b, *c, bsz, csz; // c holds the prefix sum of elements (remove if not neeeded)
+  int *b, *c, bsz, csz; // c = prefix sum of elements (remove if not neeeded)
 
   wavelet_tree() {
     lo = 1, hi = 0;
@@ -32,8 +30,7 @@ struct wavelet_tree { // template from youknowwho
     for (auto it = from; it != to; it++) {
       b[bsz] = (b[bsz - 1] + f(*it));
       c[csz] = (c[csz - 1] + (*it));
-      bsz++;
-      csz++;
+      bsz++, csz++;
     }
     if (hi == lo) return;
     auto pivot = stable_partition(from, to, f);
