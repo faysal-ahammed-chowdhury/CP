@@ -83,10 +83,13 @@ struct wavelet_tree { // template from youknowwho
 int a[N];
 
 int32_t main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+
   int n; cin >> n;
   for (int i = 1; i <= n; i++) cin >> a[i];
   t.init(a + 1, a + n + 1, -MAXV, MAXV);
   //beware! after the init() operation array a[] will not be same
-  
+
   return 0;
 }
