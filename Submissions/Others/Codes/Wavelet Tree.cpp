@@ -4,7 +4,7 @@ using namespace std;
 const int N = 3e5 + 9, MAXV = 1e9 + 9; // change here
 int a[N];
 
-struct wavelet_tree { // rawaha bhai
+struct wavelet_tree {
   int low, high;
   wavelet_tree *lft = NULL, *rgt = NULL;
   int *pref = NULL;
@@ -29,7 +29,7 @@ struct wavelet_tree { // rawaha bhai
   void swap_adjacent(int idx) {
     if (low == high)return;
     int firstBit = pref[idx] - pref[idx - 1];
-    sum[idx] = sum[idx - 1] + sum[idx + 1] - sum[idx]; //i
+    sum[idx] = sum[idx - 1] + sum[idx + 1] - sum[idx];
     if (firstBit == (pref[idx + 1] - pref[idx])) {
       if (firstBit) lft->swap_adjacent(pref[idx]);
       else rgt->swap_adjacent(idx - pref[idx]);
@@ -69,10 +69,10 @@ struct wavelet_tree { // rawaha bhai
     return lft->sum_query(pref[l - 1] + 1, pref[r], k) + rgt->sum_query(l - pref[l - 1], r - pref[r], k);
   }
   ~wavelet_tree() {
-    if (pref != NULL)delete []pref;
-    if (sum != NULL)delete []sum;
-    if (lft != NULL)delete lft;
-    if (rgt != NULL)delete rgt;
+    if (pref != NULL) delete []pref;
+    if (sum != NULL) delete []sum;
+    if (lft != NULL) delete lft;
+    if (rgt != NULL) delete rgt;
   }
 };
 

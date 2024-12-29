@@ -5,66 +5,47 @@ const int N = 1e5 + 9, MAXV = 1e9;
 pair<int, int> a[N];
 int n, b[N];
 
-//array values can be negative too, use appropriate minimum and maximum value
-struct wavelet_tree { 
-  int lo, hi;
-  wavelet_tree *l, *r;
-  int *b, bsz;
+struct wavelet_tree { // rawaha bhai
+  int low, high;
+  wavelet_tree *lft = NULL, *rgt = NULL;
+  int *pref = NULL;
 
-  wavelet_tree() {
-    lo = 1;
-    hi = 0;
-    bsz = 0;
-    l = NULL;
-    r = NULL;
-  }
-
-  void init(int *from, int *to, int x, int y) {
-    lo = x, hi = y;
-    if (from >= to) return;
-    int mid = (lo + hi) >> 1;
-    auto f = [mid](int x) {
-      return x <= mid;
-    };
-    b = (int*)malloc((to - from + 2) * sizeof(int));
-    bsz = 0;
-    b[bsz++] = 0;
-    for (auto it = from; it != to; it++) {
-      b[bsz] = (b[bsz - 1] + f(*it));
-      bsz++;
+  wavelet_tree(int *l, int *r, int low, int high): low(low), high(high) {
+    if (l >= r || low >= high) return;
+    pref = new int[r - l + 2];
+    pref[0] = 0;
+    int mid = (low + high) >> 1, cnt = 1;
+    for (int *i = l; i != r; i++, cnt++) {
+      pref[cnt] = pref[cnt - 1] + ((*i) <= mid);
     }
-    if (hi == lo) return;
-    auto pivot = stable_partition(from, to, f);
-    l = new wavelet_tree();
-    l->init(from, pivot, lo, mid);
-    r = new wavelet_tree();
-    r->init(pivot, to, mid + 1, hi);
+    int *pivot = stable_partition(l, r, [&](int x) {return x <= mid;});
+    lft = new wavelet_tree(l, pivot, low, mid);
+    rgt = new wavelet_tree(pivot, r, mid + 1, high);
   }
-  //kth smallest element in [l, r]
-  //for array [1,2,1,3,5] 2nd smallest is 1 and 3rd smallest is 2
+  // returns the k'th smallest element in range [l,r]  //act like multiset
   int kth(int l, int r, int k) {
     if (l > r) return 0;
-    if (lo == hi) return lo;
-    int inLeft = b[r] - b[l - 1], lb = b[l - 1], rb = b[r];
-    if (k <= inLeft) return this->l->kth(lb + 1, rb, k);
-    return this->r->kth(l - lb, r - rb, k - inLeft);
+    if (low == high) return low;
+    int lftCount = pref[r] - pref[l - 1];
+    if (lftCount >= k) return lft->kth(pref[l - 1] + 1, pref[r], k);
+    return rgt->kth(l - pref[l - 1], r - pref[r], k - lftCount);
   }
-  //count of numbers in [l, r] Greater than k
+  // returns the count of elements that are greater than 'k' in range [l,r]
   int GT(int l, int r, int k) {
-    if (l > r || k >= hi) return 0;
-    if (lo > k) return r - l + 1;
-    int lb = b[l - 1], rb = b[r];
-    return this->l->GT(lb + 1, rb, k) + this->r->GT(l - lb, r - rb, k);
+    if (l > r || high <= k) return 0;
+    if (low > k) return r - l + 1;
+    return lft->GT(pref[l - 1] + 1, pref[r], k) + rgt->GT(l - pref[l - 1], r - pref[r], k);
   }
   ~wavelet_tree() {
-    delete l;
-    delete r;
+    if (pref != NULL) delete []pref;
+    if (lft != NULL) delete lft;
+    if (rgt != NULL) delete rgt;
   }
-} t;
+};
 
 int xx, yy;
 
-bool ok(int k) {
+bool ok(int k, wavelet_tree &t) {
   int x, y;
   for (int i = k + k + 1; i + k + k - 1 <= n; i++) {
     x = a[i].first;
@@ -93,12 +74,12 @@ void solve() {
     // cout << "(" << a[i].first << ',' << a[i].second << ")" << '\n';
     b[i] = a[i].second;
   }
-  t.init(b + 1, b + n + 1, -MAXV, MAXV);
+  wavelet_tree t = wavelet_tree(b + 1, b + n + 1, -MAXV, MAXV);
 
   int l = 0, r = n / 4, ans = 0;
   while (l <= r) {
     int mid = (l + r) / 2;
-    if (ok(mid)) {
+    if (ok(mid, t)) {
       ans = mid;
       l = mid + 1;
     }
