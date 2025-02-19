@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int N = 1e6 + 1, mod = 1000003;
+
+const int N = 1e6 + 9, mod = 1e9 + 7; //  change here
 int fact[N], ifact[N];
 
 int power(int x, long long n, int mod) {
