@@ -28,18 +28,14 @@ void solve() {
   if (x > y) swap(x, y);
   ll ans = inf;
   for (int i = 0; i <= 60; i++) {
-    ll xx = x / (1ll << i);
-    ll yy, j;
-    if (xx == 0) {
-      j = __lg(y) + 1;
+    for (int j = 1; j <= 60; j++) {
+      ll xx = x >> i;
+      ll yy = y >> j;
+
+      if (xx == yy) {
+        ans = min(ans, f(1, i, j));
+      }
     }
-    else {
-      yy = y / xx;
-      j = __lg(yy);
-    }
-    yy = y / (1ll << j);
-    // cout << i << ' ' << yy << ' ' << j << '\n';
-    if (xx == yy) ans = min(ans, f(1, i, j));
   }
   cout << ans << '\n';
 }
