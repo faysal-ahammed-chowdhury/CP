@@ -13,7 +13,7 @@ ll get(ll a, ll p, ll n) { //  arithmetic sum
  
 struct ST {
   ll tree[4 * N];
-  array<ll, 3> lazy[4 * N];
+  array<ll, 3> lazy[4 * N]; // first element, last element, difference
   void push(int n, int b, int e) {
     int len = e - b + 1;
     if (lazy[n][2] == 0) return;
@@ -21,7 +21,7 @@ struct ST {
     if (b != e) {
       int l = n << 1, r = l + 1;
       ll first = lazy[n][0];
-      ll last = first + (1ll * (len + 1) / 2 * lazy[n][2]) - lazy[n][2];
+      ll last = first + (1ll * (((len + 1) / 2) - 1) * lazy[n][2]); // a + (n - 1) * d
       lazy[l][0] += first;
       lazy[l][1] += last;
       lazy[l][2] += lazy[n][2];
