@@ -3,7 +3,7 @@ using namespace std;
 
 const int mod = 998244353;
 
-struct Mat { // credit: YouKn0wWho
+struct Mat {
   int n, m;
   vector<vector<int>> a;
   Mat() { }
@@ -67,6 +67,7 @@ struct Mat { // credit: YouKn0wWho
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
+
   int n; long long k; cin >> n >> k;
   Mat a(n, n);
   for (int i = 0; i < n; i++) {
@@ -81,5 +82,6 @@ int32_t main() {
     }
     cout << '\n';
   }
+  
   return 0;
 }
