@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+#define int long long
 
 const int N = 2e5 + 9;
 int a[N];
@@ -8,22 +9,31 @@ int n, k;
 
 bool ok(int mex) {
   int cnt = 0;
-  set<int> se;
-  for (int i = 0; i <= mex + 2; i++) {
-    se.insert(i);
+  bool missing[mex + 5];
+  for (int i = 0; i <= mex; i++) {
+    missing[i] = true;
   }
+  int x = 0;
   for (int i = 1; i <= n; i++) {
-    if (*se.begin() >= mex + 2) {
+    if (x == mex) {
       cnt++;
+      x = 0;
       for (int j = 0; j <= mex; j++) {
-        se.insert(j);
+        missing[j] = true;
       }
     }
-    if (a[i] < mex) se.erase(a[i]);
-    if (*se.begin() >= mex) {
+    if (a[i] < mex) {
+      if (missing[a[i]]) {
+        x++;
+      }
+      // cout << i  << ' ' << x << "here\n";
+      missing[a[i]] = false;
+    }
+    if (x == mex) {
       cnt++;
-      for (int j = 0; j <= mex + 2; j++) {
-        se.insert(j);
+      x = 0;
+      for (int j = 0; j <= mex; j++) {
+        missing[j] = true;
       }
     }
   }
@@ -55,7 +65,7 @@ int32_t main() {
   cin.tie(0);
 
   int t = 1; cin >> t;
-  while(t--) {
+  while (t--) {
     solve();
   }
 
