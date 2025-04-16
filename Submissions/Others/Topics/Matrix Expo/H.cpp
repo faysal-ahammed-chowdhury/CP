@@ -1,5 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
+#define int long long
 
 const int mod = 10007;
 
@@ -67,6 +68,7 @@ struct Mat {
 int cs;
 void solve() {
   int n, a, b, c; cin >> n >> a >> b >> c;
+  cout << "Case " << ++cs << ": ";
   if (n <= 2) {
     cout << 0 << '\n';
     return;
@@ -76,7 +78,6 @@ void solve() {
   Mat A({{0}, {0}, {0}, {c}});
 
   Mat ans = M.pow(n - 2) * A;
-  cout << "Case " << ++cs << ": ";
   cout << ans.a[0][0] << '\n';
 }
 
