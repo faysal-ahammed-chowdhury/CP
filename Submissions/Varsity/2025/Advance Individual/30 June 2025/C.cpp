@@ -5,16 +5,6 @@ typedef long long ll;
 const int N = 2e6 + 9;
 ll psum[N];
 
-void print(__int128 x) {
-  string s = "";
-  while (x > 0) {
-    s += (x % 10) + '0';
-    x /= 10;
-  }
-  reverse(s.begin(), s.end());
-  cout << s << '\n';
-}
-
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
@@ -26,17 +16,16 @@ int32_t main() {
     psum[r + 1]--;
   }
 
-  __int128 ans = 0;
+  ll ans = 0;
   for (int i = 0; i < N; i++) {
     psum[i] += psum[i - 1];
-    // cout << i << ' ' << psum[i] << '\n';
     int cnt = i - c;
     if (i > d) cnt = d - c + 1;
     cnt = max(0, cnt);
-    ans += (__int128)psum[i] * cnt;
+    ans += 1ll * psum[i] * cnt;
   }
 
-  print(ans);
+  cout << ans << '\n';
 
   return 0;
 }
