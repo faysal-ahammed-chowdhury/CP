@@ -5,7 +5,7 @@ typedef long long ll;
 const int N = 200000 + 9;
 vector<int> g[N];
 int n, m, a[N], disc[N], finish[N], depth[N];
-int timer, who[N];
+int timer, actual[N]; // actual[i] = node in index i
 
 void dfs(int u, int p) {
   disc[u] = ++timer;
@@ -34,7 +34,7 @@ int32_t main() {
 
   dfs(1, 0);
   for (int i = 1; i <= n; i++) {
-    who[disc[i]] = i;
+    actual[disc[i]] = i;
   }
 
   return 0;
