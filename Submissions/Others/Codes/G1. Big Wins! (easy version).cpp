@@ -20,7 +20,7 @@ int f(int med) {
   for (int i = 1; i <= n; i++) {
     int mn = pref_min[i - 1];
     int mx = suff_max[i];
-    if (mn <= pref[i] or pref[i - 1] <= mx) ans = max(ans, med - a[i]);
+    if (mn <= mx) ans = max(ans, med - a[i]);
   }
 
   return ans;
