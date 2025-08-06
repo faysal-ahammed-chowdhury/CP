@@ -49,17 +49,17 @@ struct ST {
     int R = query(r, mid + 1, e, i, j);
     return max(L, R);
   }
-  int get_first(int n, int b, int e, int l, int r, int x) {
+  int get_first(int n, int b, int e, int i, int j, int x) {
     push(n, b, e);
-    if (b > r || e < l) return -1;
+    if (b > j || e < i) return -1;
     if (tree[n] <= x) return -1;
 
     if (b == e) return b;
 
-    int tm = b + (e - b) / 2;
-    int left = get_first(2 * n, b, tm, l, r, x);
+    int mid = (b + e) >> 1, l = n << 1, r = l + 1;
+    int left = get_first(l, b, mid, i, j, x);
     if (left != -1) return left;
-    return get_first(2 * n + 1, tm + 1, e, l , r, x);
+    return get_first(r, mid + 1, e, i , j, x);
   }
 } st;
 
