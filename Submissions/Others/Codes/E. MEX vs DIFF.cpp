@@ -64,20 +64,15 @@ int f(int mex) {
   auto idx = st.get_first(1, 1, sz, 1, sz, extra).second;
   if (idx == -1) return 0;
 
+  auto [tot_el_cnt, uniq_el] = st.query(1, 1, sz, 1, idx - 1);
+  int rem_op_cnt = extra - tot_el_cnt;
+  assert(rem_op_cnt >= 0);
+  uniq_el += min(st.query(1, 1, sz, idx, idx)[1], rem_op_cnt / idx);
 
-  auto tmp1 = st.query(1, 1, sz, 1, idx - 1);
-  int tot = tmp1[1];
-  int baki = extra - tmp1[0];
-  // assert(baki >= 0);
-  auto tmp2 = st.query(1, 1, sz, idx, idx);
-  int val = tmp2[1];
-  tot += min(val, baki / idx);
+  int tot_uniq_el = st.query(1, 1, sz, 1, sz)[1];
+  assert(tot_uniq_el >= uniq_el);
 
-  int ase = st.query(1, 1, sz, 1, sz)[1];
-  // assert(ase >= tot);
-  // cout << ase << '\n';
-
-  return ase - tot;
+  return tot_uniq_el - uniq_el;
 }
 
 void solve() {
@@ -91,6 +86,7 @@ void solve() {
   sort(v.begin(), v.end());
   v.resize(unique(v.begin(), v.end()) - v.begin());
 
+  sz = n + n + 10;
   for (int i = 0; i <= sz; i++) {
     freq[i] = 0;
   }
@@ -108,7 +104,6 @@ void solve() {
     if (freq[i] == 0) cnt++;
   }
 
-  sz = n + n + 10;
   st.build(1, 1, sz);
   for (int i = n + n + 10; i > n; i--) {
     st.upd(1, 1, sz, freq[i]);
