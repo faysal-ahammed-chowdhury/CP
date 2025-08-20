@@ -114,21 +114,10 @@ struct Hashing {
 Hashing hs;
 
 bool f(int l, int r, int d) {
-  if (l > r) return true;
   int segment = (r - l + 1) / d;
   if (segment == 1) return true;
-  if (segment & 1) {
-    int l1 = r - d + 1;
-    bool ok = hs.get_hash(l, l + d - 1) == hs.get_hash(l1, r);
-    if (ok == false) return false;
-    r -= d;
-    segment--;
-  }
-  int half = segment / 2;
-  if (hs.get_hash(l, l + d * half - 1) == hs.get_hash(l + d * half, r)) {
-    return f(l, l + d * half - 1, d);
-  }
-  return false;
+  
+  return hs.get_hash(l, r - d) == hs.get_hash(l + d, r);
 }
 
 int32_t main() {
