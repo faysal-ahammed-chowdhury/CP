@@ -1,19 +1,19 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
-using ll = long long;
 const int N = 2e5 + 9, MAXV = 5e5 + 9, inf = 1e9;
 vector<int> divs[MAXV];
-int n, a[N], spf[MAXV];
+int n, a[N], spf[MAXV], cost[MAXV];
+int dp[N][205];
 
 void sieve() {
-  for(int i = 2; i < MAXV; i++) {
-    spf[i] = i;
-  }
-
   divs[1].push_back(1);
   for (int i = 2; i < MAXV; i++) {
     divs[i].push_back(1);
+    spf[i] = i;
+  }
+
+  for (int i = 2; i < MAXV; i++) {
     for (int j = i; j < MAXV; j += i) {
       divs[j].push_back(i);
       if (spf[i] == i) {
@@ -28,11 +28,15 @@ int f(int i, int last) {
     return 0;
   }
 
+  int &ans = dp[i][last];
+  if (ans != -1) return ans;
+
   int x = a[i + 1] / divs[a[i + 1]][last];
-  int ans = inf;
+  // cout << i << ' ' << x << '\n';
+  ans = inf;
   for (int j = 0; j < divs[a[i]].size(); j++) {
     if (a[i] / (divs[a[i]][j]) <= x) {
-      ans = min(ans, f(i - 1, j));
+      ans = min(ans, cost[divs[a[i]][j]] + f(i - 1, j));
     }
   }
 
@@ -45,6 +49,11 @@ void solve() {
     cin >> a[i];
   }
 
+  for (int i = 1; i <= n; i++) {
+    for (int j = 0; j <= 200; j++) {
+      dp[i][j] = -1;
+    }
+  }
   cout << f(n - 1, 0) << '\n';
 }
 
@@ -53,13 +62,25 @@ int32_t main() {
   cin.tie(0);
   sieve();
 
-  int mx = 1;
-  for (int i = 1; i < MAXV; i++) {
-    mx = max(mx, (int)divs[i].size());
-    cout << spf[i] << '\n';
-  }
+  // int mx = 0;
+  // for (int i = 1; i < MAXV; i++) {
+    // cout << i << ": ";
+    // for (auto x : divs[i]) cout << x << ' '; cout << '\n';
+    // mx = max(mx, (int)divs[i].size());
+  // }
+  // cout << mx << '\n';
 
-  cout << mx << '\n';
+  for (int i = 1; i < MAXV; i++) {
+    int x = i;
+    while (x > 1) {
+      int p = spf[x], e = 0;
+      while (x % p == 0) {
+        e++;
+        x /= p;
+      }
+      cost[i] += e;
+    }
+  }
 
   int t = 1; cin >> t;
   while (t--) {
