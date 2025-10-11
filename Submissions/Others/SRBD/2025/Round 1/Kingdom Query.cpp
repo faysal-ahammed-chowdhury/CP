@@ -11,14 +11,13 @@ const int N = 5e5 + 9, QQ = 5e5 + 9;
 int n, a[N];
 vector<int> g[N];
 vector<pair<int, int>> Q[N];
-int sz[N], par[N];
+int par[N];
 o_set<int> se[N];
 int ans[QQ];
 
 void clr(int n) {
   for (int i = 1; i <= n; i++) {
     g[i].clear();
-    sz[i] = 1;
     se[i].clear();
     Q[i].clear();
   }
@@ -30,12 +29,11 @@ int find(int i) {
 
 void merge(int u, int v) {
   if ((u = find(u)) == (v = find(v))) return;
-  if (sz[u] > sz[v]) swap(u, v);
+  if (se[u].size() > se[v].size()) swap(u, v);
   for (auto x : se[u]) {
     se[v].insert(x);
   }
   se[u].clear();
-  sz[v] += sz[u];
   par[u] = v;
 }
 
@@ -67,7 +65,6 @@ void find_ans(int p, int k, int id) {
 }
 
 void dfs(int u, int p) {
-  sz[u] = 1;
   se[u].insert(a[u]);
   for (auto v : g[u]) {
     if (v != p) {
