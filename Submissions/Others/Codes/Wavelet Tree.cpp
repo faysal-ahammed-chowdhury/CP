@@ -47,7 +47,7 @@ struct wavelet_tree {
     if (k <= mid) return lft->count(pref[l - 1] + 1, pref[r], k);
     return rgt->count(l - pref[l - 1], r - pref[r], k);
   }
-  // returns the k'th smallest element in range [l,r]  //act like multiset
+  // returns the k'th smallest element in range [l,r]  // act like multiset
   int kth(int l, int r, int k) {
     if (l > r) return 0;
     if (low == high) return low;
@@ -60,6 +60,12 @@ struct wavelet_tree {
     if (l > r || low > k) return 0;
     if (high <= k) return r - l + 1;
     return lft->LTE(pref[l - 1] + 1, pref[r], k) + rgt->LTE(l - pref[l - 1], r - pref[r], k);
+  }
+  // returns the count of elements that are greater than or equal to 'k' in range [l,r]
+  int GTE(int l, int r, int k) {
+    if (l > r || high < k) return 0;
+    if (low >= k) return r - l + 1;
+    return lft->GTE(pref[l - 1] + 1, pref[r], k) + rgt->GTE(l - pref[l - 1], r - pref[r], k);
   }
   // returns the sum of elements less than 'k' in range [l,r]
   long long sum_query(int l, int r, int k) {
