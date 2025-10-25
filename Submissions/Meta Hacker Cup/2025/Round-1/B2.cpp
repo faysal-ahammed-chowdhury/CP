@@ -31,16 +31,16 @@ int nCr(int n, int r) {
 }
 
 
-int f(int n, int org_n) {
+int f(int x, int n) {
   int ans = 1;
   for (auto p : primes) {
     int ex = 0;
-    while (n % p == 0) {
-      n /= p;
+    while (x % p == 0) {
+      x /= p;
       ex++;
     }
     if (ex > 0) {
-      ans *= nCr(ex + org_n - 1, ex);
+      ans *= nCr(ex + n - 1, ex);
       ans %= mod;
     }
   }
@@ -72,9 +72,8 @@ void solve() {
   for (auto x : divs) {
     int here = 0;
     if (x <= a) {
-      int xx = x;
       int y = b / x;
-      here = f(xx, n) * f(y, n) % mod;
+      here = f(x, n) * f(y, n) % mod;
     }
     ans += here;
     ans %= mod;
