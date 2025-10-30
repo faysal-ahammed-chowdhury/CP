@@ -8,7 +8,7 @@ int g[N][N], nxt[N][N];
 ll dis[N][N];
 int n, m;
 
-vector<int> construct_path(int u, int v) {
+vector<int> construct_path(int u, int v) { 
   if (nxt[u][v] == -1) return {};
   vector<int> path = { u };
   while (u != v) {
@@ -42,13 +42,15 @@ void floyd_warshall() {
 
 int main() {
   int q; cin >> n >> m >> q;
+  memset(nxt, -1, sizeof nxt);
   while (m--) {
     int u, v, w; cin >> u >> v >> w;
     g[u][v] = (g[u][v] != 0 ? min(g[u][v], w) : w);
     g[v][u] = (g[v][u] != 0 ? min(g[v][u], w) : w);
+    nxt[u][v] = v;
+    nxt[v][u] = u;
   }
 
-  memset(nxt, -1, sizeof nxt);
   floyd_warshall();
 
   while (q--) {
