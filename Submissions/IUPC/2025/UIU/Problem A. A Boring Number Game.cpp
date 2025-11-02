@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 
 const int N = 1e6 + 9, mod = 998244353;
 int fact[N], ifact[N];
@@ -41,24 +42,33 @@ int nPr(int n, int r) {
   return 1ll * fact[n] * ifact[n - r] % mod;
 }
 
-int cs = 0;
+
 void solve() {
   int n, k; cin >> n >> k;
-  int numer = (1ll * (n) * power(k, n, mod) % mod) - (1ll * (n - 1) * power(k, n - 1, mod) % mod);
-  if (numer < 0) numer += mod;
-  int hor = power(k, n, mod);
-  int ans = 1ll * numer * inverse(hor) % mod;
+  int ans = 0;
+  // for (int len = 1; len <= n; len++) {
+  //   int p = 1ll * nCr(n - 1, len - 1) * k % mod * power(k - 1, len - 1, mod) % mod;
+  //   // cout << len << ' ' << p << '\n';
+  //   p = 1ll * p * power(power(k, n, mod), mod - 2, mod) % mod;
+  //   ans += 1ll * p * len % mod;
+  //   ans %= mod;
+  // }
+  // cout << ans << '\n';
+  ans = (1 - (power(k, mod - 2, mod)));
+  if (ans < 0) ans += mod;
+  ans = 1ll * ans * (n - 1) % mod;
+  ans++;
+  ans %= mod;
   cout << ans << '\n';
 }
 
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
-  prec(); // must include
+  prec();
 
-  int t = 1;
-  cin >> t;
-  while (t--) {
+  int t = 1; cin >> t;
+  while(t--) {
     solve();
   }
 
