@@ -23,11 +23,7 @@ void dfs(int u, int p) {
 
 void dfs2(int u, int p) {
   for (int i = 2; u != 1 and i <= 40; i++) {
-    dp2[u][i] = dp[p][i - 1] - dp[u][i - 2];
-    // cout << u << ' ' << i << ' ' << dp2[u][i] << '\n';
-  }
-  for (int i = 1; i <= 40; i++) {
-    dp2[u][i] += dp2[p][i - 1];
+    dp2[u][i] = (dp[p][i - 1] + dp2[p][i - 1]) - dp[u][i - 2];
   }
   for (auto v : g[u]) {
     if (v != p) {
@@ -51,8 +47,8 @@ int32_t main() {
     g[u].push_back(v);
     g[v].push_back(u);
   }
-  dfs(1, 0);
-  dfs2(1, 0);
+  dfs(1, 0); // rose from subtree
+  dfs2(1, 0); // rose from par
   
   int q; cin >> q;
   while (q--) {
