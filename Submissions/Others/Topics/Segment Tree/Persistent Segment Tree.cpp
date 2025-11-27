@@ -6,7 +6,8 @@ const int N = 2e5 + 9;
 int a[N];
 
 struct node {
-  int val;
+  int cnt; // change here
+  ll val;
   node *lc, *rc;
 };
 node *versions[N];
@@ -16,7 +17,7 @@ node* build(int b, int e) {
   node *me = new node();
   nodes.push_back(me);
   if (b == e) {
-    me->val = 0; // change here
+    me->cnt = 0; // change here
     me->lc = NULL;
     me->rc = NULL;
     return me;
@@ -24,7 +25,7 @@ node* build(int b, int e) {
   int mid = (b + e) >> 1;
   me->lc = build(b, mid);
   me->rc = build(mid + 1, e);
-  me->val = me->lc->val + me->rc->val; // change here
+  me->cnt = me->lc->cnt + me->rc->cnt; // change here
   return me;
 }
 
@@ -32,7 +33,7 @@ node *upd(node *me, int b, int e, int i, int x) {
   node *newme = new node();
   nodes.push_back(newme);
   if (b == e and b == i) {
-    newme->val = me->val + x; // change here
+    newme->cnt = me->cnt + x; // change here
     newme->lc = NULL;
     newme->rc = NULL;
     return newme;
@@ -46,21 +47,31 @@ node *upd(node *me, int b, int e, int i, int x) {
     newme->rc = upd(me->rc, mid + 1, e, i, x);
     newme->lc = me->lc;
   }
-  newme->val = newme->lc->val + newme->rc->val; // change here
+  newme->cnt = newme->lc->cnt + newme->rc->cnt; // change here
   return newme;
 }
 
-// returns kth element
+// returns kth element in range [l, r] (range provided when call)
 int kth(node *me1, node *me2, int b, int e, int k) {
   if (b == e) {
     return b;
   }
-  int cnt = me1->lc->val - me2->lc->val;
+  int cnt = me1->lc->cnt - me2->lc->cnt;
   int mid = (b + e) >> 1;
   if (cnt >= k) {
     return kth(me1->lc, me2->lc, b, mid, k);
   }
   return kth(me1->rc, me2->rc, mid + 1, e, k - cnt);
+}
+
+// return the sum of values between [i, j] and range [l, r] (provided when call)
+ll sum_query(node *me1, node *me2, int b, int e, int i, int j) {
+  if (b > j || e < i) return 0; // return appropriate value
+  if (b >= i and e <= j) return me1->val - me2->val; // change here
+  int mid = (b + e) >> 1;
+  ll L = sum_query(me1->lc, me2->lc, b, mid, i, j);
+  ll R = sum_query(me1->rc, me2->rc, mid + 1, e, i, j);
+  return (L + R);
 }
 
 int32_t main() {
