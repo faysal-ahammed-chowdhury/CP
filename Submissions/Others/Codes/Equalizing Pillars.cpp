@@ -87,33 +87,32 @@ ll sum_query(node *me1, node *me2, int b, int e, int i, int j) {
   return (L + R);
 }
 
-// Caution: Understand which value to used (Real or Compressed)
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
   int n, m; cin >> n >> m;
-  vector<int> compressed;
+  vector<int> v;
   for (int i = 1; i <= n; i++) {
     cin >> a[i];
-    compressed.push_back(a[i]);
+    v.push_back(a[i]);
   }
-  sort(compressed.begin(), compressed.end());
-  compressed.resize(unique(compressed.begin(), compressed.end()) - compressed.begin());
+  sort(v.begin(), v.end());
+  v.resize(unique(v.begin(), v.end()) - v.begin());
 
-  versions[0] = build(1, compressed.size());
+  versions[0] = build(1, v.size());
   for (int i = 1; i <= n; i++) {
-    a[i] = lower_bound(compressed.begin(), compressed.end(), a[i]) - compressed.begin() + 1;
-    versions[i] = upd(versions[i - 1], 1, compressed.size(), a[i], +1, compressed[a[i] - 1]);
+    a[i] = lower_bound(v.begin(), v.end(), a[i]) - v.begin() + 1;
+    versions[i] = upd(versions[i - 1], 1, v.size(), a[i], +1, v[a[i] - 1]);
   }
 
   while (m--) {
     int l, r; cin >> l >> r;
     int len = r - l + 1;
     int mid = (len + 1) / 2;
-    int x = kth(versions[r], versions[l - 1], 1, compressed.size(), mid);
-    ll ans = ((1ll * count(versions[r], versions[l - 1], 1, compressed.size(), 1, x - 1) * compressed[x - 1]) - sum_query(versions[r], versions[l - 1], 1, compressed.size(), 1, x - 1));
-    ans += sum_query(versions[r], versions[l - 1], 1, compressed.size(), x + 1, compressed.size()) - (1ll * compressed[x - 1] * count(versions[r], versions[l - 1], 1, compressed.size(), x + 1, compressed.size()));
+    int x = kth(versions[r], versions[l - 1], 1, v.size(), mid);
+    ll ans = ((1ll * count(versions[r], versions[l - 1], 1, v.size(), 1, x - 1) * v[x - 1]) - sum_query(versions[r], versions[l - 1], 1, v.size(), 1, x - 1));
+    ans += sum_query(versions[r], versions[l - 1], 1, v.size(), x + 1, v.size()) - (1ll * v[x - 1] * count(versions[r], versions[l - 1], 1, v.size(), x + 1, v.size()));
     cout << ans << '\n';
   }
 
@@ -125,4 +124,3 @@ int32_t main() {
 
   return 0;
 }
-// https://toph.co/p/equalizing-pillars
