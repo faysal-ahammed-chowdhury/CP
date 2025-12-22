@@ -2,7 +2,7 @@
 using namespace std;
 #define int long long
 
-const int N = 10, MAX = 100;
+const int N = 100, MAX = 1e5;
 
 // NEVER use rand() function because rand() will always generate same random values even if you run the same code multiple times
 mt19937_64 rnd(chrono::steady_clock::now().time_since_epoch().count()); // using current time as seed, so it will always generate different random values if you run this code multiple times
@@ -18,18 +18,14 @@ int32_t main() {
   int t = get_rand(1, 2);
   cout << t << '\n';
   while (t--) {
-    int n = get_rand(1, N);
-    int q = get_rand(1, N);
-    cout << n << ' ' << q << '\n';
+    int n = get_rand(2, N);
+    int a = get_rand(1, n - 1);
+    int b = get_rand(1, n - a);
+    cout << n << ' ' << a << ' ' << b << '\n';
     for (int i = 1; i <= n; i++) {
       cout << get_rand(1, MAX) << ' ';
     }
     cout << '\n';
-    for (int i = 1; i <= q; i++) {
-      int l = get_rand(1, n);
-      int r = get_rand(1, n);
-      cout << min(l, r) << ' ' << max(l, r) << '\n';
-    }
   }
 
   return 0;

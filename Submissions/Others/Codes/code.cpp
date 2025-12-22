@@ -1,57 +1,68 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 
-const int N = 2e5 + 9, K = 20; // change here
-int a[N], diff[N], tree[N][K];
+const int N = 100 + 9, MXV = 1e6 + 9;
+const ll inf = 1e18;
+int spf[MXV];
+int n, a[N];
+pair<ll, pair<ll, ll>> costs[N];
 
-int log2_floor(unsigned long long i) {
-  return i ? __builtin_clzll(1) - __builtin_clzll(i) : -1;
-}
-
-void build(int n) {
-  for (int i = 1; i <= n; i++) {
-    tree[i][0] = diff[i];
+void spf_sieve() {
+  for (int i = 2; i < MXV; i++) {
+    spf[i] = i;
   }
-  for (int k = 1; k < K; k++) {
-    for (int i = 1; i + (1 << k) - 1 <= n; i++) {
-      tree[i][k] = __gcd(tree[i][k - 1], tree[i + (1 << (k - 1))][k - 1]); 
+  for (int i = 2; i < MXV; i++) {
+    if (spf[i] == i) {
+      for (int j = i; j < MXV; j += i) {
+        spf[j] = min(spf[j], i);
+      }
     }
   }
-}
-
-int query(int l, int r) {
-  int k = log2_floor(r - l + 1);
-  return __gcd(tree[l][k], tree[r - (1 << k) + 1][k]);
 }
 
 void solve() {
-  int n, q; cin >> n >> q;
+  int cnt1, cnt2; cin >> n >> cnt1 >> cnt2;
   for (int i = 1; i <= n; i++) {
     cin >> a[i];
-  }
-  for (int i = 1; i <= n; i++) {
-    diff[i] = abs(a[i] - a[i - 1]);
-  }
-
-  build(n);
-
-  while (q--) {
-    int l, r; cin >> l >> r;
-    if (l == r) {
-      cout << 0 << ' ';
-      continue;
+    ll cost1 = 0, cost2 = 0;
+    int x = a[i];
+    while (x > 1) {
+      int p = spf[x], ex = 0;
+      while (x % p == 0) {
+        ex++;
+        x /= p;
+      }
+      if (p == 2) cost1 += 1ll * p * ex;
+      else cost2 += 1ll * p * ex;
     }
-    cout << query(l + 1, r) << ' ';
+    costs[i] = {cost1 - cost2, {cost1, cost2}};
   }
-  cout << '\n';
+
+  sort(costs + 1, costs + n + 1);
+
+  ll ans = 0;
+  for (int i = 1; i <= cnt2; i++) {
+    ans += costs[i].second.first;
+  }
+  int st = n - cnt1 + 1;
+  for (int i = st; i <= n; i++) {
+    ans += costs[i].second.second;
+  }
+  for (int i = cnt2 + 1; i < st; i++) {
+    ans += min(costs[i].second.first, costs[i].second.second);
+  }
+
+  cout << ans << '\n';
 }
 
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
+  spf_sieve();
 
   int t = 1; cin >> t;
-  while(t--) {
+  while (t--) {
     solve();
   }
 

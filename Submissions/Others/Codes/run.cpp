@@ -3,7 +3,7 @@ using namespace std;
 
 const int ITER = 10000; // select the number of iterations
 
-// populate and save the brute, code and gen files
+// populate and save the brute, codeC and gen files
 int32_t main() {
   string brute = "g++ -o brute brute.cpp";
   system(brute.c_str()); // compiling the brute solution
