@@ -2,7 +2,7 @@
 using namespace std;
 typedef long long ll;
 
-const int N = 100 + 9, MXV = 1e6 + 9;
+const int N = 2e5 + 9, MXV = 1e6 + 9;
 const ll inf = 1e18;
 int spf[MXV];
 int n, a[N];
