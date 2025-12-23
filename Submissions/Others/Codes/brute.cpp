@@ -1,66 +1,142 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+#define int long long
 
-const int N = 100 + 9, MXV = 1e6 + 9;
-const ll inf = 1e18;
-int spf[MXV];
+const int N = 100 + 9, mod = 1e9 + 7;
+const ll inf = 1e9;
 int n, a[N];
-ll dp[N][N][N];
 
-void spf_sieve() {
-  for (int i = 2; i < MXV; i++) {
-    spf[i] = i;
-  }
-  for (int i = 2; i < MXV; i++) {
-    if (spf[i] == i) {
-      for (int j = i; j < MXV; j += i) {
-        spf[j] = min(spf[j], i);
-      }
+int power(int x, long long n, int mod) {
+  int ans = 1 % mod;
+  while (n > 0) {
+    if (n & 1) {
+      ans = 1LL * ans * x % mod;
     }
+    x = 1LL * x * x % mod;
+    n >>= 1;
   }
-}
-
-ll f(int i, int rem1, int rem2) {
-  if (i > n) return (!rem1 and !rem2) ? 0 : inf;
-  ll &ans = dp[i][rem1][rem2];
-  if (ans != -1) return ans;
-  ans = inf;
-  ll cost1 = 0, cost2 = 0;
-  int x = a[i];
-  while (x > 1) {
-    int p = spf[x], ex = 0;
-    while (x % p == 0) {
-      ex++;
-      x /= p;
-    }
-    if (p == 2) cost1 += 1ll * p * ex;
-    else cost2 += 1ll * p * ex;
-  }
-  ans = min(ans, cost1 + f(i + 1, rem1, max(0, rem2 - 1)));
-  ans = min(ans, cost2 + f(i + 1, max(0, rem1 - 1), rem2));
-
   return ans;
-}
-
-void solve() {
-  int cnt1, cnt2; cin >> n >> cnt1 >> cnt2;
-  for (int i = 1; i <= n; i++) {
-    cin >> a[i];
-  }
-
-  memset(dp, -1, sizeof dp);
-  cout << f(1, cnt1, cnt2) << '\n';
 }
 
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
-  spf_sieve();
 
-  int t = 1; cin >> t;
-  while(t--) {
-    solve();
+  int q; cin >> n >> q;
+  for (int i = 1; i <= n; i++) {
+    cin >> a[i];
+  }
+
+
+  while (q--) {
+    int type; cin >> type;
+    if (type == 1) {
+      int idx, k; cin >> idx >> k;
+      int cur = a[1], cnt = 0;
+      bool ok = true;
+      for (int i = 2; i < idx; i++) {
+        cnt++;
+        if (a[i] > cur) {
+          cur = a[i];
+          cnt = 0;
+          continue;
+        }
+
+        if (cnt >= k) {
+          ok = false;
+          cout << 0 << '\n';
+          break;
+        }
+      }
+
+      if (ok) {
+        int cnt = 0, pos = 0, mx = 0;
+        int first;
+        for (int i = 1; i <= idx; i++) {
+          if (a[i] == a[idx]) {
+            first = i;
+            break;
+          }
+        }
+        for (int i = 1; i <= min(n, first + k); i++) {
+          mx = max(mx, a[i]);
+          if (a[i] == a[idx]) cnt++;
+          if (a[i] == a[idx] and i <= idx) pos++;
+        }
+
+        if (mx > a[idx]) {
+          cout << 0 << '\n';
+        }
+        else {
+          int upore = (pos == 1) ? 1 : power(2, pos - 2, mod);
+          int niche = power(2, cnt - 1, mod);
+          int ans = 1ll * upore * power(niche, mod - 2, mod) % mod;
+          cout << ans << '\n';
+        }
+      }
+    }
+    else {
+      int idx; cin >> idx;
+
+      int k = 1;
+      for (int i = 1; i <= idx; i++) {
+        if (a[i] == a[idx]) {
+          k = max(k, idx - i);
+        }
+        else {
+          for (int j = i + 1; j <= idx; j++) {
+            if (a[j] > a[i]) {
+              k = max(k, j - i);
+              break;
+            }
+          }
+        }
+      }
+
+      int cur = a[1], cnt = 0;
+      bool ok = true;
+      for (int i = 2; i < idx; i++) {
+        cnt++;
+        if (a[i] > cur) {
+          cur = a[i];
+          cnt = 0;
+          continue;
+        }
+
+        if (cnt >= k) {
+          ok = false;
+          cout << 0 << '\n';
+          break;
+        }
+      }
+
+      if (ok) {
+        int cnt = 0, pos = 0, mx = 0;
+        int first;
+        for (int i = 1; i <= idx; i++) {
+          if (a[i] == a[idx]) {
+            first = i;
+            break;
+          }
+        }
+        for (int i = 1; i <= min(n, first + k); i++) {
+          mx = max(mx, a[i]);
+          if (a[i] == a[idx]) cnt++;
+          if (a[i] == a[idx] and i <= idx) pos++;
+        }
+
+        if (mx > a[idx]) {
+          cout << 0 << '\n';
+        }
+        else {
+          int upore = (pos == 1) ? 1 : power(2, pos - 2, mod);
+          int niche = power(2, cnt - 1, mod);
+          int ans = 1ll * upore * power(niche, mod - 2, mod) % mod;
+          cout << ans << '\n';
+        }
+      }
+    }
   }
 
   return 0;
