@@ -15,25 +15,15 @@ int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
 
-  int t = get_rand(1, 1);
-  // cout << t << '\n';
+  int t = get_rand(1, 2);
+  cout << t << '\n';
   while (t--) {
-    int n = get_rand(2, N);
-    int q = get_rand(1, N);
-    cout << n << ' ' << q << '\n';
+    int n = get_rand(2, 8);
+    cout << n << '\n';
     for (int i = 1; i <= n; i++) {
-      cout << get_rand(1, MAX) << ' ';
+      cout << get_rand(0, 1) << ' ';
     }
     cout << '\n';
-
-    while (q--) {
-      int type = get_rand(1, 2);
-      int i = get_rand(1, n);
-      int k = get_rand(1, n);
-      cout << type << ' ' << i << ' ';
-      if (type == 1) cout << k << '\n';
-      else cout << '\n';
-    }
   }
 
   return 0;
