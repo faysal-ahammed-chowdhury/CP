@@ -52,6 +52,7 @@ struct ST {
   }
 } st;
 
+
 void solve() {
   int n, m; cin >> n >> m;
   pair<int, int> a[n + 1], b[m + 1];
@@ -66,45 +67,40 @@ void solve() {
 
   sort(a + 1, a + n + 1);
 
-  st.build(1, 1, n);
-  set <pair<int, int>> se;
-  int sum = 0, ans = 0;
+  int ans = 0, sum = 0;
+  multiset<int> ms;
   for (int i = n; i >= 1; i--) {
     auto [y, x] = a[i];
-
-    while (se.size() > y) {
-      auto it = se.begin();
-      sum -= (*it).first;
-      se.erase(it);
-      st.upd(1, 1, n, se.size(), n, sum);
-    }
-
-    se.insert({x, y});
+    y++;
     sum += x;
-
-    while (se.size() > y + 1) {
-      auto it = se.begin();
-      sum -= (*it).first;
-      se.erase(it);
+    ms.insert(x);
+    while (ms.size() > y) {
+      sum -= *ms.begin();
+      ms.erase(ms.begin());
     }
+
     ans = max(ans, sum);
-
-    while (se.size() > y) {
-      auto it = se.begin();
-      sum -= (*it).first;
-      se.erase(it);
-    }
-
-    // cout << y << ' ' << sum << '\n';
-
-    st.upd(1, 1, n, se.size(), n, sum);
   }
 
-  while (se.size() > 0) {
-    auto it = se.begin();
-    sum -= (*it).first;
-    se.erase(it);
-    st.upd(1, 1, n, se.size(), n, sum);
+  ms.clear();
+  sum = 0;
+  st.build(1, 1, n);
+  a[0] = {0, 0};
+  for (int i = n; i >= 0; i--) {
+    auto [y, x] = a[i];
+    while (ms.size() > y) {
+      sum -= *ms.begin();
+      ms.erase(ms.begin());
+      st.upd(1, 1, n, ms.size(), n, sum);
+    }
+
+    sum += x;
+    ms.insert(x);
+    if (ms.size() > y) {
+      sum -= *ms.begin();
+      ms.erase(ms.begin());
+    }
+    st.upd(1, 1, n, ms.size(), n, sum);
   }
 
   for (int i = 1; i <= m; i++) {
